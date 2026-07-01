@@ -1,0 +1,27 @@
+name: Run Tests
+
+on:
+  push:              # triggers every time you push code
+  pull_request:      # triggers on pull requests too
+
+jobs:
+  test:
+    runs-on: ubuntu-latest   # GitHub provides a free virtual machine
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run tests              # ← this is the QA step
+        run: dotnet test --no-build --verbosity normal
